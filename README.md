@@ -1,75 +1,30 @@
-# Nuxt 3 Minimal Starter
+# Nuxt 3 useState localStorage example
+Example project to see how to avoid a few 500 errors, including
+1. localStorage is not defined
+2. 
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
-## Setup
+## Main Code 
+```ts
+// composables/useUsers.ts
+interface User { 
+  name: string
+}
 
-Make sure to install the dependencies:
+export const useUsers = () => {
+  const users = useState<User[]>('users', () => [])
 
-```bash
-# npm
-npm install
+  if (process.client) {  // <- MUST HAVE WRAPPED AROUND WHERE YOU WANT TO USE localStorage
+    users.value = JSON.parse(localStorage.getItem('users') || '[]')
+  }
 
-# pnpm
-pnpm install
+  const createUser = (user: User) => {
+    users.value.push(user)
+    if (process.client) { // <- Everytime
+      localStorage.setItem('users', JSON.stringify(users.value))
+    }
+  }
 
-# yarn
-yarn install
-
-# bun
-bun install
+  return { users, createUser }
+}
 ```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
