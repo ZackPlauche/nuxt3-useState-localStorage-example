@@ -1,8 +1,5 @@
 # Nuxt 3 useState localStorage example
-Example project to see how to avoid a few 500 errors, including
-1. localStorage is not defined
-2. 
-
+Example project to see how to avoid a few 500 errors when trying to use localStorage
 
 ## Main Code 
 ```ts
